@@ -1,20 +1,33 @@
+// coin.js
 let coins = [];
 let coinImage = new Image();
 coinImage.src = 'assets/coin.png';
 
+// BFS to find all reachable tiles from player's start
+function getReachableTiles(startX, startY) {
+    const visited = Array.from({ length: rows }, () => Array(cols).fill(false));
+    const reachable = [];
+    const queue = [[startX, startY]];
+
+    while (queue.length) {
+        const [x, y] = queue.shift();
+        if (x < 0 || y < 0 || x >= cols || y >= rows) continue;
+        if (visited[y][x] || maze[y][x] !== 0) continue;
+
+        visited[y][x] = true;
+        reachable.push([x, y]);
+        queue.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);
+    }
+    return reachable;
+}
+
 function setupCoins(count = 5) {
     coins = [];
-    for (let i = 0; i < count; i++) {
-        let cx, cy;
-        let attempts = 0;
-        do {
-            cx = Math.floor(Math.random() * cols);
-            cy = Math.floor(Math.random() * rows);
-            attempts++;
-            // safety: if too many attempts, break to avoid infinite loop
-            if (attempts > 1000) break;
-        } while (maze[cy][cx] === 1 || (cx === player.x && cy === player.y));
-        coins.push({ x: cx, y: cy });
+    const reachableTiles = getReachableTiles(player.x, player.y);
+    for (let i = 0; i < count && reachableTiles.length; i++) {
+        const index = Math.floor(Math.random() * reachableTiles.length);
+        const [x, y] = reachableTiles.splice(index, 1)[0];
+        coins.push({ x, y });
     }
 }
 
@@ -23,19 +36,14 @@ function drawCoins() {
         const tileX = c.x * tileWidth;
         const tileY = c.y * tileHeight;
         if (coinImage.complete && coinImage.width > 0) {
-            // Draw coin image smaller (70% of tile) and centered to hide background
-            const coinSize = Math.min(tileWidth, tileHeight);
+            const coinSize = Math.min(tileWidth, tileHeight) * 0.7;
             const offsetX = (tileWidth - coinSize) / 2;
             const offsetY = (tileHeight - coinSize) / 2;
             ctx.drawImage(coinImage, tileX + offsetX, tileY + offsetY, coinSize, coinSize);
         } else {
-            // Fallback: draw gold circle while image loads
-            const cx = tileX + tileWidth / 2;
-            const cy = tileY + tileHeight / 2;
-            const radius = Math.max(4, Math.min(tileWidth, tileHeight) * 0.18);
             ctx.fillStyle = 'gold';
             ctx.beginPath();
-            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+            ctx.arc(tileX + tileWidth / 2, tileY + tileHeight / 2, Math.min(tileWidth, tileHeight) * 0.18, 0, Math.PI * 2);
             ctx.fill();
         }
     });
@@ -50,12 +58,11 @@ function checkCoinCollection() {
         }
         return true;
     });
-    // If all coins collected and time remains, advance to next level
+
     if (coins.length === 0) {
         if (typeof levelComplete === 'function') {
             levelComplete();
         } else {
-            // fallback behavior
             alert('You win!');
         }
     }
