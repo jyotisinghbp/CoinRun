@@ -75,7 +75,7 @@ Coin Rush Maze is a **Collect-a-Thon + Puzzle** game built using **HTML5 Canvas,
 
 ---
 
-## 🔍 Pseudocode
+<!-- ## 🔍 Pseudocode
 ```javascript
 function initGame() {
     createCanvas();
@@ -103,7 +103,7 @@ function gameLoop() {
     if (coins.length === 0) nextLevel();
     if (timer <= 0) gameOver();
     requestAnimationFrame(gameLoop);
-}
+} -->
 🚀 How to Run
 
 Clone or download the repository.
@@ -121,6 +121,35 @@ Animations and sound effects.
 Power-ups and moving obstacles.
 High score tracking with local storage.
 
+🚀 Future Enhancements
+
+
+Multiple Levels
+Add progressive difficulty with different maze sizes and themes (Forest, Desert, Ice).
+
+
+Obstacles
+Introduce moving enemies, traps, locked doors with keys, and teleport portals.
+
+
+Power-Ups
+Speed boost, shield, and coin magnet for added strategy.
+
+
+Dynamic Gameplay
+Time limits, shifting walls, and hidden passages for extra challenge.
+
+
+Scoring & Rewards
+Bonus points, achievements, and leaderboards.
+
+
+Visual & Audio Effects
+Smooth animations, sound effects, and themed backgrounds.
+
+
+Advanced Features
+Random maze generator, character customization, and multiplayer mode.
 
 📜 License
 This project is open-source and free to use for learning and development purposes.

@@ -1,15 +1,38 @@
 let player = { x: 0, y: 0 };
 let runnerImage = new Image();
 runnerImage.src = 'assets/runner.png';
+let keys = {};
+let lastMoveTime = 0;
+const MOVE_DELAY = 150; // milliseconds between moves
 
 function setupPlayer() {
     player = { x: 0, y: 0 };
+    lastMoveTime = 0;
+    keys = {};
+    
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowUp') movePlayer(0, -1);
-        if (e.key === 'ArrowDown') movePlayer(0, 1);
-        if (e.key === 'ArrowLeft') movePlayer(-1, 0);
-        if (e.key === 'ArrowRight') movePlayer(1, 0);
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+            e.preventDefault();
+            keys[e.key] = true;
+            processMovement();
+        }
     });
+    
+    document.addEventListener('keyup', (e) => {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+            keys[e.key] = false;
+        }
+    });
+}
+
+function processMovement() {
+    const now = Date.now();
+    if (now - lastMoveTime < MOVE_DELAY) return;
+    
+    if (keys['ArrowUp']) { movePlayer(0, -1); lastMoveTime = now; }
+    else if (keys['ArrowDown']) { movePlayer(0, 1); lastMoveTime = now; }
+    else if (keys['ArrowLeft']) { movePlayer(-1, 0); lastMoveTime = now; }
+    else if (keys['ArrowRight']) { movePlayer(1, 0); lastMoveTime = now; }
 }
 
 function movePlayer(dx, dy) {
