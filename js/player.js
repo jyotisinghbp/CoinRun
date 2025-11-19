@@ -42,6 +42,7 @@ function movePlayer(dx, dy) {
         player.x = newX;
         player.y = newY;
         checkCoinCollection();
+        if (typeof checkCollisions === 'function') checkCollisions();
         drawGame();
     }
 }

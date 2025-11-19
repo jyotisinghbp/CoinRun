@@ -23,7 +23,18 @@ function getReachableTiles(startX, startY) {
 
 function setupCoins(count = 5) {
     coins = [];
-    const reachableTiles = getReachableTiles(player.x, player.y);
+    let reachableTiles = getReachableTiles(player.x, player.y);
+    // filter out tiles occupied by enemies or fire paths
+    if (typeof enemies !== 'undefined' && enemies.length > 0) {
+        const enemySet = new Set(enemies.map(e => `${e.x},${e.y}`));
+        reachableTiles = reachableTiles.filter(([x,y]) => !enemySet.has(`${x},${y}`));
+    }
+    if (typeof fires !== 'undefined' && fires.length > 0) {
+        const fireSet = new Set();
+        fires.forEach(f => f.path.forEach(p => fireSet.add(`${p.x},${p.y}`)));
+        reachableTiles = reachableTiles.filter(([x,y]) => !fireSet.has(`${x},${y}`));
+    }
+
     for (let i = 0; i < count && reachableTiles.length; i++) {
         const index = Math.floor(Math.random() * reachableTiles.length);
         const [x, y] = reachableTiles.splice(index, 1)[0];
@@ -54,15 +65,19 @@ function checkCoinCollection() {
         if (c.x === player.x && c.y === player.y) {
             score += 10;
             updateScore(score);
+            console.log('Coin collected! Coins remaining:', coins.length - 1);
             return false;
         }
         return true;
     });
 
+    console.log('After filtering, coins remaining:', coins.length);
     if (coins.length === 0) {
+        console.log('All coins collected! Calling levelComplete()');
         if (typeof levelComplete === 'function') {
             levelComplete();
         } else {
+            console.log('levelComplete not found');
             alert('You win!');
         }
     }

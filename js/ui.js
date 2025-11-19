@@ -20,5 +20,7 @@ function drawGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawMaze();
     drawCoins();
+    if (typeof drawFires === 'function') drawFires();
+    if (typeof drawEnemies === 'function') drawEnemies();
     drawPlayer();
 }
