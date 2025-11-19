@@ -82,3 +82,12 @@ function checkCoinCollection() {
         }
     }
 }
+
+// Export functions/vars for CommonJS tests
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        getReachableTiles,
+        setupCoins,
+        coins
+    };
+}
