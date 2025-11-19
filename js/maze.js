@@ -21,8 +21,14 @@ const baseMaze = [
     [1,1,1,1,1,0,0,0,1,0]
 ];
 
-function setupMaze() {
-    maze = JSON.parse(JSON.stringify(baseMaze));
+function setupMaze(levelIndex = 0) {
+    // Load maze from levels if available; fallback to baseMaze
+    if (typeof levels !== 'undefined' && levels[levelIndex] && levels[levelIndex].maze) {
+        // clone to avoid mutating original
+        maze = JSON.parse(JSON.stringify(levels[levelIndex].maze));
+    } else {
+        maze = JSON.parse(JSON.stringify(baseMaze));
+    }
 }
 
 function drawMaze() {
