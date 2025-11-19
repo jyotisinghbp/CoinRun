@@ -1,10 +1,10 @@
 let score = 0;
 let timer = 60;
-let currentLevelIndex = 0; // 0-based index into levels[]
-let level = 1; // user-visible level number
-let gameInterval; // timer interval
-let gameTickInterval; // tick for enemies/fires
-let levelCompleted = false; // flag to prevent multiple levelComplete calls
+let currentLevelIndex = 0;
+let level = 1;
+let gameInterval;
+let gameTickInterval;
+let levelCompleted = false;
 let enemies = [];
 let fires = [];
 let enemyImage = new Image();
@@ -12,36 +12,37 @@ enemyImage.src = 'assets/enemy.png';
 let fireImage = new Image();
 fireImage.src = 'assets/fire.png';
 
+const overlay = document.getElementById('overlay');
+const overlayMessage = document.getElementById('overlay-message');
+const nextBtn = document.getElementById('nextBtn');
+const retryBtn = document.getElementById('retryBtn');
+
 function initGame() {
     score = 0;
     currentLevelIndex = 0;
     level = 1;
     levelCompleted = false;
+    hideOverlay();
     loadLevel(currentLevelIndex);
 }
 
 function loadLevel(idx) {
-    // clear any existing intervals
     clearInterval(gameInterval);
     clearInterval(gameTickInterval);
 
-    levelCompleted = false; // reset flag for new level
+    levelCompleted = false;
     currentLevelIndex = idx;
     level = idx + 1;
 
-    // setup maze and entities based on levels.js
     setupMaze(currentLevelIndex);
     setupPlayer();
 
-    // setup coins based on level config
     const cfg = (typeof levels !== 'undefined' && levels[currentLevelIndex]) ? levels[currentLevelIndex] : null;
     const coinCount = cfg && cfg.coinCount ? cfg.coinCount : 5;
 
-    // setup enemies and fires
     enemies = [];
     fires = [];
     if (cfg) {
-        // clone enemies and initialize runtime properties
         if (Array.isArray(cfg.enemies)) {
             cfg.enemies.forEach(e => {
                 enemies.push({
@@ -64,10 +65,8 @@ function loadLevel(idx) {
         }
     }
 
-    // Place coins avoiding enemies and fires
     setupCoins(coinCount);
 
-    // UI updates
     timer = cfg && cfg.timer ? cfg.timer : 60;
     updateLevel(level);
     updateTimer(timer);
@@ -75,14 +74,13 @@ function loadLevel(idx) {
 
     drawGame();
 
-    // start timer and tick loop
     startTimer();
     gameTickInterval = setInterval(() => {
         updateEnemies();
         updateFires();
         checkCollisions();
         drawGame();
-    }, 400); // 400ms tick for enemy/fire movement
+    }, 400);
 }
 
 function startTimer() {
@@ -93,7 +91,7 @@ function startTimer() {
         if (timer <= 0) {
             clearInterval(gameInterval);
             clearInterval(gameTickInterval);
-            endGame(`Time's up! Final Score: ${score}`);
+            showOverlay(`⏳ Time's up! Final Score: ${score}`, false);
         }
     }, 1000);
 }
@@ -111,7 +109,6 @@ function updateEnemies() {
 function updateFires() {
     fires.forEach(fire => {
         if (!fire.path || fire.path.length === 0) return;
-        // move along path back and forth
         fire.idx += fire.direction;
         if (fire.idx >= fire.path.length) { fire.idx = fire.path.length - 2; fire.direction = -1; }
         if (fire.idx < 0) { fire.idx = 1; fire.direction = 1; }
@@ -147,16 +144,15 @@ function drawFires() {
 }
 
 function checkCollisions() {
-    // coins handled elsewhere in checkCoinCollection
     enemies.forEach(enemy => {
         if (player.x === enemy.x && player.y === enemy.y) {
-            endGame('You were caught by an enemy!');
+            showOverlay(`💀 You were caught by an enemy! Final Score: ${score}`, false);
         }
     });
     fires.forEach(fire => {
         const pos = fire.path[fire.activeIndex];
         if (player.x === pos.x && player.y === pos.y) {
-            endGame('You got burned!');
+            showOverlay(`🔥 You got burned! Final Score: ${score}`, false);
         }
     });
 }
@@ -164,33 +160,45 @@ function checkCollisions() {
 function endGame(msg) {
     clearInterval(gameInterval);
     clearInterval(gameTickInterval);
-    alert(msg + ` Final Score: ${score}`);
+    showOverlay(msg, false);
 }
 
 function levelComplete() {
-    if (levelCompleted) return; // prevent multiple calls
+    if (levelCompleted) return;
     levelCompleted = true;
-    
-    console.log('levelComplete() called');
+
     clearInterval(gameInterval);
     clearInterval(gameTickInterval);
-    
-    // Check if there are more levels
+
     if (currentLevelIndex + 1 < levels.length) {
-        console.log('Advancing to level', currentLevelIndex + 2);
-        alert(`Level ${level} cleared! Proceeding to level ${level + 1}`);
-        loadLevel(currentLevelIndex + 1);
+        showOverlay(`🎉 Level ${level} Cleared! Proceed to Level ${level + 1}`, true);
     } else {
-        console.log('Game complete!');
-        alert(`You beat the game! Final Score: ${score}`);
+        showOverlay(`🏆 You beat the game! Final Score: ${score}`, false);
     }
 }
 
-// wire buttons
-document.getElementById('startBtn').addEventListener('click', () => {
-    initGame();
-});
+// Overlay functions
+function showOverlay(message, hasNext) {
+    overlayMessage.textContent = message;
+    overlay.style.display = 'flex';
+    nextBtn.style.display = hasNext ? 'inline-block' : 'none';
+    retryBtn.style.display = 'inline-block';
 
-document.getElementById('restartBtn').addEventListener('click', () => {
-    initGame();
-});
+    nextBtn.onclick = () => {
+        overlay.style.display = 'none';
+        loadLevel(currentLevelIndex + 1);
+    };
+
+    retryBtn.onclick = () => {
+        overlay.style.display = 'none';
+        loadLevel(currentLevelIndex);
+    };
+}
+
+function hideOverlay() {
+    overlay.style.display = 'none';
+}
+
+// Wire buttons
+document.getElementById('startBtn').addEventListener('click', initGame);
+document.getElementById('restartBtn').addEventListener('click', initGame);

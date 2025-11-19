@@ -32,35 +32,45 @@ function setupMaze(levelIndex = 0) {
 }
 
 function drawMaze() {
-    // Recalculate tile size in case canvas was resized
     tileWidth = canvas.width / cols;
     tileHeight = canvas.height / rows;
+
+    // Define color themes for levels
+    const themes = {
+       
+        1: { wallStart: '#355E3B', wallEnd: '#6B8E23', path: '#FFD580' },
+        2: { wallStart: '#092635', wallEnd: '#0B3B3B', path: '#5C8374' }, 
+        3: { wallStart: '#0A1F44', wallEnd: '#1E3A5F', path: '#A9B8D4' }  
+    };
+
+    const theme = themes[level] || themes[1]; // fallback to level 1 theme
 
     for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
             if (maze[y][x] === 1) {
-                // Create a gradient for a wood/rock effect
+                // Gradient for wall tiles
                 const gradient = ctx.createLinearGradient(
                     x * tileWidth, y * tileHeight,
                     (x + 1) * tileWidth, (y + 1) * tileHeight
                 );
-                gradient.addColorStop(0, '#5C4033'); // Dark brown
-                gradient.addColorStop(1, '#8B5A2B'); // Lighter brown
+                gradient.addColorStop(0, theme.wallStart);
+                gradient.addColorStop(1, theme.wallEnd);
                 ctx.fillStyle = gradient;
 
-                // Add shadow for depth
-                ctx.shadowColor = '#3e2a1e';
-                ctx.shadowBlur = 8;
+                // Shadow for depth
+                ctx.shadowColor = '#000000';
+                ctx.shadowBlur = 6;
 
                 ctx.fillRect(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
             } else {
-                // Path color (light beige for contrast)
-                ctx.fillStyle = '#F5DEB3'; // Wheat color
+                // Path tiles
+                ctx.fillStyle = theme.path;
+                ctx.shadowBlur = 0;
                 ctx.fillRect(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
             }
         }
     }
 
-    // Reset shadow after drawing
     ctx.shadowBlur = 0;
 }
+
