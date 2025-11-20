@@ -1,4 +1,4 @@
-# 🎮 Coin Rush Maze
+# 🎮 Maze Runner
 
 ## **Game Overview**
 Coin Rush Maze is a **Collect-a-Thon + Puzzle Adventure** game built using **HTML5 Canvas, CSS, and JavaScript**. The player navigates through a maze to collect coins while avoiding obstacles and enemies. The game features **multiple levels**, each increasing in complexity and challenge.
