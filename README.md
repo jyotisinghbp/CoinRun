@@ -98,4 +98,7 @@ Coin Rush Maze is a **Collect-a-Thon + Puzzle Adventure** game built using **HTM
 - Multiplayer mode and character customization.
 
 ---
+## **Test Report**
+<img width="558" height="558" alt="image" src="https://github.com/user-attachments/assets/1eaa4523-89a0-47c9-9a6e-82dba09fef0a" />
+
 
