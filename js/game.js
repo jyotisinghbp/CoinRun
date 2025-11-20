@@ -202,3 +202,13 @@ function hideOverlay() {
 // Wire buttons
 document.getElementById('startBtn').addEventListener('click', initGame);
 document.getElementById('restartBtn').addEventListener('click', initGame);
+
+// Export functions for tests (CommonJS)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        initGame,
+        loadLevel,
+        showOverlay,
+        levelComplete
+    };
+}
