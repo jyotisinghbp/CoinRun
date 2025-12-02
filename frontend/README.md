@@ -1,156 +1,104 @@
-# CoinRun
-A simple JavaScript maze game where players navigate through a maze, collect coins, and race against time to achieve the highest score.
- 
- # Coin Rush Maze
+# 🎮 Maze Runner
 
-## 🎮 Game Overview
-Coin Rush Maze is a **Collect-a-Thon + Puzzle** game built using **HTML5 Canvas, CSS, and JavaScript**. The player navigates through a maze to collect all coins before time runs out. Each level increases in complexity, making the game progressively challenging.
+## **Game Overview**
+Coin Rush Maze is a **Collect-a-Thon + Puzzle Adventure** game built using **HTML5 Canvas, CSS, and JavaScript**. The player navigates through a maze to collect coins while avoiding obstacles and enemies. The game features **multiple levels**, each increasing in complexity and challenge.
 
 ---
 
-## ✅ Features
-- Player-controlled character (Arrow keys)
-- Static maze (dynamic maze generation coming soon)
-- Coins randomly placed in accessible positions
-- Score system and timer
-- Level progression
-- Simple UI with Start and Restart buttons
+## ✅ **Features**
+- Player-controlled character (Arrow keys).
+- **Three Levels** with progressive difficulty.
+- Static maze layout (dynamic maze generation planned).
+- Coins placed in accessible positions.
+- **Enemies and obstacles** appear as levels progress.
+- Score system and countdown timer.
+- Level progression after clearing coins.
+- Simple UI with **Start** and **Restart** buttons.
 
 ---
 
-## 🖼 Wireframe Sketch
+## 🖼 **Wireframe Sketch**
+
 +---------------------------------------------------+
 | Score: 000   Timer: 60s   Level: 1              |
 +---------------------------------------------------+
-|                                                 |
-|   [Maze Grid with Player and Coins]            |
-|                                                 |
-+---------------------------------------------------+
 | [Start Button]   [Restart Button]              |
++---------------------------------------------------+
+|                                                 |
+|   [Maze Grid with Player, Coins, Obstacles]    |
+|                                                 |
 +---------------------------------------------------+
 
 
 ---
 
-## 🛠 Technical Requirements
-- **HTML5 Canvas** for rendering maze, player, coins.
+## 🛠 **Technical Requirements**
+- **HTML5 Canvas** for rendering maze, player, coins, enemies.
 - **CSS** for styling UI elements.
 - **JavaScript** for:
   - Game loop (`requestAnimationFrame`).
-  - Maze generation algorithm (Recursive Backtracking).
-  - Collision detection (player vs walls, player vs coins).
+  - Maze generation algorithm (Recursive Backtracking – future).
+  - Collision detection (player vs walls, coins, enemies).
   - Timer and score logic.
   - Event listeners for controls.
 
 ---
 
-## 📜 Development Plan
-### Phase 1: Setup
+## 📜 **Development Plan**
+### **Phase 1: Setup**
 - Create HTML structure with `<canvas>` and UI elements.
 - Initialize canvas and game loop.
 
-### Phase 2: Player & Controls
+### **Phase 2: Player & Controls**
 - Draw player object.
 - Implement keyboard controls for movement.
 
-### Phase 3: Maze Generation
-- Implement maze algorithm.
-- Render maze on canvas.
+### **Phase 3: Maze & Levels**
+- Render maze layout.
+- Add **three levels** with increasing complexity.
 
-### Phase 4: Coins & Collection
+### **Phase 4: Coins & Collection**
 - Draw coins on canvas.
 - Detect collision with player.
 
-### Phase 5: Timer & Level Progression
-- Add countdown timer.
-- Increase maze complexity each level.
+### **Phase 5: Enemies & Obstacles**
+- Add static obstacles and moving enemies in higher levels.
+- Implement collision logic for game-over conditions.
 
-### Phase 6: UI & Feedback
+### **Phase 6: Timer & Level Progression**
+- Add countdown timer.
+- Transition to next level after all coins are collected.
+
+### **Phase 7: UI & Feedback**
 - Display score, timer, level.
 - Add start/restart buttons.
 
-### Phase 7: Polish
+### **Phase 8: Polish (Not Yet Implemented)**
 - Add animations, sounds.
 - Optimize performance.
 
 ---
 
-<!-- ## 🔍 Pseudocode
-```javascript
-function initGame() {
-    createCanvas();
-    setupUI();
-    currentLevel = 1;
-    score = 0;
-    startGame();
-}
+## 🚀 **How to Run**
+1. Clone or download the repository.
+2. Open `index.html` in any modern web browser.
+3. Click **Start Game** to begin.
+4. Use **Arrow keys** to move the player and collect coins while avoiding obstacles.
 
-function startGame() {
-    maze = generateMaze(currentLevel);
-    coins = placeCoins(maze);
-    player = { x: startX, y: startY };
-    timer = setTimer(currentLevel);
-    gameLoop();
-}
-
-function gameLoop() {
-    clearCanvas();
-    drawMaze(maze);
-    drawCoins(coins);
-    drawPlayer(player);
-    updateTimer();
-    checkCollisions();
-    if (coins.length === 0) nextLevel();
-    if (timer <= 0) gameOver();
-    requestAnimationFrame(gameLoop);
-} -->
-🚀 How to Run
-
-Clone or download the repository.
-Open index.html in any modern web browser.
-Click Start Game to begin.
-Use Arrow keys to move the player and collect coins.
-
-
-🔮 Future Enhancements
-
-Dynamic maze generation using Recursive Backtracking.
-Difficulty scaling (larger maze, more coins).
-Game Over screen with restart UI.
-Animations and sound effects.
-Power-ups and moving obstacles.
-High score tracking with local storage.
-
-🚀 Future Enhancements
-
-
-Multiple Levels
-Add progressive difficulty with different maze sizes and themes (Forest, Desert, Ice).
-
-
-Obstacles
-Introduce moving enemies, traps, locked doors with keys, and teleport portals.
-
-
-Power-Ups
-Speed boost, shield, and coin magnet for added strategy.
-
-
-Dynamic Gameplay
-Time limits, shifting walls, and hidden passages for extra challenge.
-
-
-Scoring & Rewards
-Bonus points, achievements, and leaderboards.
-
-
-Visual & Audio Effects
-Smooth animations, sound effects, and themed backgrounds.
-
-
-Advanced Features
-Random maze generator, character customization, and multiplayer mode.
-
-📜 License
-This project is open-source and free to use for learning and development purposes.
 ---
+
+## 🔮 **Future Enhancements**
+- Dynamic Maze Generation using Recursive Backtracking.
+- Level Outlets and better obstacle placement.
+- Moving enemies with AI patterns.
+- Power-ups (speed boost, shield, coin magnet).
+- Game Over screen with restart UI.
+- High score tracking with local storage.
+- Visual & audio effects for immersive gameplay.
+- Multiplayer mode and character customization.
+
+---
+## **Test Report**
+<img width="558" height="558" alt="image" src="https://github.com/user-attachments/assets/1eaa4523-89a0-47c9-9a6e-82dba09fef0a" />
+
+
