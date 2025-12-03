@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoinRun.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251202042111_InitialCreate")]
+    [Migration("20251203173514_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

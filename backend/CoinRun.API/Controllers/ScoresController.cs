@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using CoinRun.API.Data;
 using CoinRun.API.DTOs;
 using CoinRun.API.Models;
@@ -35,20 +36,25 @@ namespace CoinRun.API.Controllers
             _db.Scores.Add(score);
             _db.SaveChanges();
 
-            return Ok("Score saved");
+            return Ok(new { message = "Score saved" });
         }
 
         [HttpGet("top")]
         public IActionResult GetTopScores()
         {
+            // Group by User to get only the best score per player
             var scores = _db.Scores
+                .Include(s => s.User)
+                .AsEnumerable() // Perform grouping in memory to ensure correct selection
+                .GroupBy(s => s.UserId)
+                .Select(g => g.OrderByDescending(s => s.ScoreValue).ThenBy(s => s.TimeTaken).First())
                 .OrderByDescending(s => s.ScoreValue)
                 .ThenBy(s => s.TimeTaken)
                 .Take(3)
                 .Select(s => new
                 {
-                    User = s.User.Username,
-                    Character = s.User.CharacterName,
+                    User = s.User?.Username ?? "Unknown",
+                    Character = s.User?.CharacterName ?? "Unknown",
                     s.ScoreValue,
                     s.TimeTaken
                 })

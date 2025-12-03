@@ -23,7 +23,14 @@ async function login() {
 
     if (result.token) {
         saveToken(result.token);
-        window.location.href = "select-player.html";
+        
+        // Load player info to get current character
+        if (typeof loadPlayerInfo === 'function') {
+            await loadPlayerInfo();
+        }
+
+        document.getElementById("login-section").classList.add("hidden");
+        document.getElementById("select-section").classList.remove("hidden");
     } else {
         alert("Login failed");
     }
