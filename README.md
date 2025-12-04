@@ -59,6 +59,13 @@ CoinRun is a full-stack web-based maze runner game where players navigate throug
    ```
    The API will typically start on `http://localhost:5000` or `https://localhost:5001`.
 
+5. **Access API Documentation (Swagger):**
+   Once the backend is running, you can view and test all API endpoints by visiting:
+   ```
+   http://localhost:5117/swagger
+   ```
+   *(Note: Adjust the port number if your local setup uses a different one).*
+
 ### 2. Frontend Setup
 1. Navigate to the frontend directory:
    ```bash
