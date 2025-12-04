@@ -33,16 +33,16 @@ namespace CoinRun.API.Controllers
 
         [Authorize]
         [HttpPut("character")]
-        public IActionResult UpdateCharacter([FromBody] dynamic body)
+        public IActionResult UpdateCharacter([FromBody] System.Text.Json.JsonElement body)
         {
             int userId = int.Parse(User.FindFirst("id").Value);
-            string character = body.characterName;
+            string character = body.GetProperty("characterName").GetString();
 
             var user = _db.Users.First(u => u.Id == userId);
             user.CharacterName = character;
             _db.SaveChanges();
 
-            return Ok("Character updated");
+            return Ok(new { message = "Character updated" });
         }
     }
 }

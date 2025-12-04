@@ -74,3 +74,12 @@ function drawMaze() {
     ctx.shadowBlur = 0;
 }
 
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        setupMaze,
+        drawMaze,
+        getMaze: () => maze,
+        setMaze: (m) => { maze = m; }
+    };
+}
+

@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinRun.API", "backend\CoinRun.API\CoinRun.API.csproj", "{ED7F33F2-417F-C49C-BFF5-D215A36ED65D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED7F33F2-417F-C49C-BFF5-D215A36ED65D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED7F33F2-417F-C49C-BFF5-D215A36ED65D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED7F33F2-417F-C49C-BFF5-D215A36ED65D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED7F33F2-417F-C49C-BFF5-D215A36ED65D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ED7F33F2-417F-C49C-BFF5-D215A36ED65D} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0A23E2DC-C5AF-4F99-8B09-5F44E749C7D3}
+	EndGlobalSection
+EndGlobal

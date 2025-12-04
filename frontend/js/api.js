@@ -22,5 +22,19 @@ async function api(path, method = "GET", body = null, auth = false) {
         body: body ? JSON.stringify(body) : null
     });
 
-    return response.json();
+    if (!response.ok) {
+        const error = new Error("API Error");
+        error.status = response.status;
+        const text = await response.text();
+        try {
+            error.data = JSON.parse(text);
+        } catch (e) {
+            error.data = text;
+        }
+        throw error;
+    }
+
+    // Handle empty responses (like 204 No Content)
+    const text = await response.text();
+    return text ? JSON.parse(text) : {};
 }

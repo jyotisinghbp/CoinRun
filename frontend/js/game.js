@@ -1,4 +1,5 @@
 let score = 0;
+let checkpointScore = 0; // Score at the start of the current level
 let timer = 60;
 let currentLevelIndex = 0;
 let level = 1;
@@ -17,18 +18,25 @@ const overlayMessage = document.getElementById('overlay-message');
 const nextBtn = document.getElementById('nextBtn');
 const retryBtn = document.getElementById('retryBtn');
 
-function initGame() {
+let isGameRunning = false;
+
+function initGame(autoStart = true) {
     score = 0;
+    checkpointScore = 0;
     currentLevelIndex = 0;
     level = 1;
     levelCompleted = false;
     hideOverlay();
-    loadLevel(currentLevelIndex);
+    loadLevel(currentLevelIndex, autoStart);
 }
 
-function loadLevel(idx) {
+function loadLevel(idx, autoStart = true) {
     clearInterval(gameInterval);
     clearInterval(gameTickInterval);
+    isGameRunning = false;
+
+    // Reset score to the checkpoint (start of level)
+    score = checkpointScore;
 
     levelCompleted = false;
     currentLevelIndex = idx;
@@ -74,6 +82,17 @@ function loadLevel(idx) {
 
     drawGame();
 
+    if (autoStart) {
+        startGameLoop();
+    } else {
+        showOverlay("Ready to Start?", false, true);
+    }
+}
+
+function startGameLoop() {
+    if (isGameRunning) return;
+    isGameRunning = true;
+    
     startTimer();
     gameTickInterval = setInterval(() => {
         updateEnemies();
@@ -171,6 +190,8 @@ function levelComplete() {
     clearInterval(gameTickInterval);
 
     if (currentLevelIndex + 1 < levels.length) {
+        // Save score as checkpoint for the next level
+        checkpointScore = score;
         showOverlay(`🎉 Level ${level} Cleared! Proceed to Level ${level + 1}`, true);
     } else {
         showOverlay(`🏆 You beat the game! Final Score: ${score}`, false);
@@ -178,21 +199,71 @@ function levelComplete() {
 }
 
 // Overlay functions
-function showOverlay(message, hasNext) {
+function showOverlay(message, hasNext, isStart = false) {
     overlayMessage.textContent = message;
     overlay.style.display = 'flex';
+    
+    // Default button state
     nextBtn.style.display = hasNext ? 'inline-block' : 'none';
     retryBtn.style.display = 'inline-block';
+    retryBtn.textContent = "Retry Level";
 
-    nextBtn.onclick = () => {
-        overlay.style.display = 'none';
-        loadLevel(currentLevelIndex + 1);
-    };
+    const startImg = document.getElementById('start-image');
+    if (startImg) startImg.style.display = 'none';
 
-    retryBtn.onclick = () => {
-        overlay.style.display = 'none';
-        loadLevel(currentLevelIndex);
-    };
+    // 0. Start Game Case
+    if (isStart) {
+        retryBtn.textContent = "Start Game";
+        retryBtn.onclick = () => {
+            overlay.style.display = 'none';
+            startGameLoop();
+        };
+        if (startImg) startImg.style.display = 'block';
+        return;
+    }
+
+    // 1. Next Level Case
+    if (hasNext) {
+        retryBtn.style.display = 'none'; // Hide retry when progressing
+        nextBtn.onclick = () => {
+            overlay.style.display = 'none';
+            loadLevel(currentLevelIndex + 1, true);
+        };
+    }
+
+    // 2. Game Won Case
+    if (message.includes("beat the game")) {
+        retryBtn.textContent = "Play Again";
+        retryBtn.onclick = () => {
+            hideOverlay();
+            initGame(false);
+        };
+
+        // Submit Score
+        if (typeof submitScore === 'function') {
+            // Calculate time taken (assuming 60s limit if not defined)
+            const limit = (typeof levels !== 'undefined' && levels[currentLevelIndex] && levels[currentLevelIndex].timeLimit) || 60;
+            const timeTaken = Math.max(0, limit - timer);
+            submitScore(score, timeTaken);
+        }
+    }
+    // 3. Game Over Case
+    else if (message.includes("Game Over") || message.includes("burned") || message.includes("Time's up")) {
+        retryBtn.onclick = () => {
+            overlay.style.display = 'none';
+            loadLevel(currentLevelIndex, true);
+        };
+
+        // Submit Score on Game Over as well
+        if (typeof submitScore === 'function') {
+            console.log("Submitting score on Game Over...");
+            const limit = (typeof levels !== 'undefined' && levels[currentLevelIndex] && levels[currentLevelIndex].timeLimit) || 60;
+            const timeTaken = Math.max(0, limit - timer);
+            submitScore(score, timeTaken);
+        } else {
+            console.error("submitScore function is not defined!");
+        }
+    }
 }
 
 function hideOverlay() {
@@ -200,8 +271,7 @@ function hideOverlay() {
 }
 
 // Wire buttons
-document.getElementById('startBtn').addEventListener('click', initGame);
-document.getElementById('restartBtn').addEventListener('click', initGame);
+document.getElementById('restartBtn').addEventListener('click', () => initGame(true));
 
 // Export functions for tests (CommonJS)
 if (typeof module !== 'undefined' && module.exports) {

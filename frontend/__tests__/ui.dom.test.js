@@ -44,6 +44,7 @@ beforeEach(() => {
   global.updateTimer = jest.fn();
   global.updateUI = jest.fn();
   global.drawGame = jest.fn();
+  global.submitScore = jest.fn(); // Mock submitScore
 
   // provide a simple levels array
   global.levels = require('../js/levels');
@@ -75,7 +76,7 @@ test('winning shows Next Level button', () => {
 
   expect(overlay.style.display).toBe('flex');
   expect(nextBtn.style.display).toBe('inline-block');
-  expect(retryBtn.style.display).toBe('inline-block');
+  expect(retryBtn.style.display).toBe('none'); // Retry is hidden on win
   expect(msg.length).toBeGreaterThan(0);
 });
 
