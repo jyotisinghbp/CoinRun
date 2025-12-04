@@ -2,9 +2,14 @@ async function register() {
     const username = document.getElementById("reg-username").value;
     const password = document.getElementById("reg-password").value;
     const msgDiv = document.getElementById("register-message");
+    const btn = document.querySelector("button[onclick='register()']"); // Select the register button
     
     // Default character to Ninja since selection is removed
     const character = "Ninja";
+
+    // Disable button to prevent double submission
+    if (btn) btn.disabled = true;
+    msgDiv.style.display = "none";
 
     try {
         const result = await api("/auth/register", "POST", {
@@ -13,20 +18,37 @@ async function register() {
             characterName: character
         });
 
-        // Assuming result is a string message based on previous code
         msgDiv.style.display = "block";
         msgDiv.style.color = "#ffd700"; // Success color
-        msgDiv.innerText = result + " Please login above.";
+        
+        // Handle both object (new backend) and string (old backend/fallback) responses
+        const message = (result && result.message) ? result.message : result;
+        msgDiv.innerText = message + ". Please login above.";
     } catch (error) {
         msgDiv.style.display = "block";
         msgDiv.style.color = "#ff4444"; // Error color
         
         let msg = error.data;
-        if (typeof msg === 'string' && msg.toLowerCase().includes("username already exists")) {
-             msgDiv.innerText = "Username already exists. Please choose another.";
+        console.error("Registration error:", error);
+
+        if (typeof msg === 'string') {
+            // Display the exact message from the server
+            msgDiv.innerText = msg;
+        } else if (typeof msg === 'object' && msg !== null) {
+            // Handle validation errors (e.g. { errors: { Username: [...] } })
+            if (msg.errors) {
+                const firstError = Object.values(msg.errors).flat()[0];
+                msgDiv.innerText = firstError || "Registration failed. Invalid data.";
+            } else if (msg.title) {
+                msgDiv.innerText = msg.title;
+            } else {
+                msgDiv.innerText = "Registration failed. Try a different username.";
+            }
         } else {
-             msgDiv.innerText = "Registration failed. Try a different username.";
+             msgDiv.innerText = "Registration failed. Please check your connection.";
         }
+    } finally {
+        if (btn) btn.disabled = false;
     }
 }
 

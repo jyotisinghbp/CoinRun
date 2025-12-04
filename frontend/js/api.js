@@ -36,5 +36,9 @@ async function api(path, method = "GET", body = null, auth = false) {
 
     // Handle empty responses (like 204 No Content)
     const text = await response.text();
-    return text ? JSON.parse(text) : {};
+    try {
+        return text ? JSON.parse(text) : {};
+    } catch (e) {
+        return text;
+    }
 }
