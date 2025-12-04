@@ -23,8 +23,21 @@ namespace CoinRun.API.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterDto dto)
         {
-            if (_db.Users.Any(u => u.Username == dto.Username))
-                return BadRequest("Username already exists");
+            Console.WriteLine($"[Register] Attempting to register user: '{dto.Username}'");
+
+            if (string.IsNullOrWhiteSpace(dto.Username))
+                return BadRequest("Username cannot be empty");
+
+            if (string.IsNullOrWhiteSpace(dto.Password))
+                return BadRequest("Password cannot be empty");
+
+            // Check if user exists (case-insensitive check is safer)
+            var existingUser = _db.Users.FirstOrDefault(u => u.Username == dto.Username);
+            if (existingUser != null)
+            {
+                Console.WriteLine($"[Register] Username '{dto.Username}' already exists. ID: {existingUser.Id}");
+                return BadRequest($"Username '{dto.Username}' already exists");
+            }
 
             var user = new User
             {
@@ -37,7 +50,7 @@ namespace CoinRun.API.Controllers
             _db.Users.Add(user);
             _db.SaveChanges();
 
-            return Ok("User registered");
+            return Ok(new { message = "User registered successfully" });
         }
 
         [HttpPost("login")]
