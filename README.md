@@ -1,4 +1,4 @@
-# CoinRun 🎮
+# MazeRunner 🎮
 
 CoinRun is a full-stack web-based maze runner game where players navigate through levels, collect coins, and avoid obstacles. The application features a robust .NET backend for user management and score tracking, paired with a responsive HTML5 Canvas frontend.
 
