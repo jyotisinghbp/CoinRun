@@ -84,6 +84,8 @@ function loadLevel(idx, autoStart = true) {
 
     if (autoStart) {
         startGameLoop();
+    } else {
+        showOverlay("Ready to Start?", false, true);
     }
 }
 
@@ -197,7 +199,7 @@ function levelComplete() {
 }
 
 // Overlay functions
-function showOverlay(message, hasNext) {
+function showOverlay(message, hasNext, isStart = false) {
     overlayMessage.textContent = message;
     overlay.style.display = 'flex';
     
@@ -205,6 +207,20 @@ function showOverlay(message, hasNext) {
     nextBtn.style.display = hasNext ? 'inline-block' : 'none';
     retryBtn.style.display = 'inline-block';
     retryBtn.textContent = "Retry Level";
+
+    const startImg = document.getElementById('start-image');
+    if (startImg) startImg.style.display = 'none';
+
+    // 0. Start Game Case
+    if (isStart) {
+        retryBtn.textContent = "Start Game";
+        retryBtn.onclick = () => {
+            overlay.style.display = 'none';
+            startGameLoop();
+        };
+        if (startImg) startImg.style.display = 'block';
+        return;
+    }
 
     // 1. Next Level Case
     if (hasNext) {
@@ -217,11 +233,10 @@ function showOverlay(message, hasNext) {
 
     // 2. Game Won Case
     if (message.includes("beat the game")) {
-        retryBtn.textContent = "Back to Menu";
+        retryBtn.textContent = "Play Again";
         retryBtn.onclick = () => {
-            document.getElementById("game-section").classList.add("hidden");
-            document.getElementById("select-section").classList.remove("hidden");
             hideOverlay();
+            initGame(false);
         };
 
         // Submit Score
@@ -256,7 +271,6 @@ function hideOverlay() {
 }
 
 // Wire buttons
-document.getElementById('startBtn').addEventListener('click', startGameLoop);
 document.getElementById('restartBtn').addEventListener('click', () => initGame(true));
 
 // Export functions for tests (CommonJS)

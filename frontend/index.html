@@ -12,74 +12,79 @@
 
     <!-- LOGIN SECTION -->
     <div id="login-section" class="auth-container hidden">
-        <h1>CoinRun</h1>
+        <h1>Maze Runner</h1>
+        <p style="font-size: 14px; color: #ccc; margin-bottom: 15px;">
+            If you have an account, please login. If you are new, register below and then login.
+        </p>
+        
         <h3>Login</h3>
+        <div id="login-error" style="color: #ff4444; font-size: 14px; margin-bottom: 10px; display: none;"></div>
         <input type="text" id="login-username" placeholder="Username">
         <input type="password" id="login-password" placeholder="Password">
         <button onclick="login()">Login</button>
         <hr>
         <h3>Register</h3>
+        <div id="register-message" style="color: #ffd700; font-size: 14px; margin-bottom: 10px; display: none;"></div>
         <input type="text" id="reg-username" placeholder="Username">
         <input type="password" id="reg-password" placeholder="Password">
-        <select id="reg-character">
-            <option value="Runner">Runner</option>
-            <option value="Ninja">Ninja</option>
-            <option value="Robot">Robot</option>
-        </select>
+        <!-- Character selection removed -->
         <button onclick="register()">Register</button>
     </div>
 
-    <!-- CHARACTER SELECT SECTION -->
-    <div id="select-section" class="select-container hidden">
-        <h1>Select Your Character</h1>
-        <select id="character-select">
-            <option value="Runner">Runner</option>
-            <option value="Ninja">Ninja</option>
-            <option value="Robot">Robot</option>
-        </select>
-        <button onclick="saveCharacter()">Save & Play</button>
-    </div>
-
     <!-- GAME SECTION -->
-    <div id="game-section" class="game-container hidden">
+    <div id="game-section" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+        
+        <!-- Header spanning full width -->
+        
+<div style="width: 100%; max-width: 1600px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 10px 20px; box-sizing: border-box;">
+  <h1 style="grid-column: 2; margin: 0; color: #ffd700; font-size: 40px; text-shadow: 2px 2px 4px #000; text-align: center;">
+    Maze Runner
+  </h1>
+  <button onclick="logout()" class="wooden-btn logout-btn" style="grid-column: 3; justify-self: end;">
+    Logout
+  </button>
 
-    <div class="sidebar">
-        <h2>Top Players</h2>
-        <ul id="leaderboard"></ul>
-    </div>
-
-    <div class="game-area">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h3 id="player-info" style="margin: 0;">Loading...</h3>
-            <button onclick="logout()" style="background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">Logout</button>
         </div>
 
-        <div class="top-bar">
-            <div class="info">
-                <div id="timer">Time: 60</div>
-                <div id="level">Level: 1</div>
+        <div class="game-container">
+            <div class="game-area">
+                <div class="top-bar">
+                    <div class="info">
+                        <div id="timer">Time: 60</div>
+                        <div id="level">Level: 1</div>
+                    </div>
+                    <div class="score">
+                        <div id="score">Score: 0</div>
+                    </div>
+                </div>
+
+                <!-- Player Info moved below Time/Score -->
+              <h3 id="player-info" style="margin: 10px 10px;color: #ffd700; font-size: 28px; text-shadow: 2px 2px 4px #000;">Loading...</h3>
+
+                <div class="controls-bar" style="margin-bottom: 20px;">
+                    <button id="restartBtn">Restart</button>
+                </div>
+
+                <!-- Your existing canvas -->
+                <canvas id="gameCanvas" width="600" height="400"></canvas>
             </div>
-            <div class="score">
-                <div id="score">Score: 0</div>
+
+            <div class="sidebar">
+                <h2>Fastest Players</h2>
+                <ul id="leaderboard"></ul>
             </div>
         </div>
 
-        <div class="controls-bar">
-            <button id="startBtn">Start</button>
-            <button id="restartBtn">Restart</button>
+        <div id="overlay">
+            <div class="overlay-content">
+                <div id="overlay-message"></div>
+                <div id="start-image"></div>
+                <div class="overlay-buttons">
+                    <button id="nextBtn">Next Level</button>
+                    <button id="retryBtn">Retry</button>
+                </div>
+            </div>
         </div>
-
-        <!-- Your existing canvas -->
-        <canvas id="gameCanvas" width="600" height="400"></canvas>
-    </div>
-
-    <div id="overlay">
-        <div id="overlay-message"></div>
-        <div class="overlay-buttons">
-            <button id="nextBtn">Next Level</button>
-            <button id="retryBtn">Retry</button>
-        </div>
-    </div>
 
     </div> <!-- End of game-section -->
 
@@ -90,6 +95,5 @@
 <script src="js/ui.js"></script>
 <script src="js/game.js"></script>
 <script src="js/login.js"></script>
-<script src="js/select.js"></script>
 </body>
 </html>

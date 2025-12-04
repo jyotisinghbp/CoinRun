@@ -4,7 +4,6 @@ window.onload = async () => {
     const token = getToken();
     if (!token) {
         document.getElementById("login-section").classList.remove("hidden");
-        document.getElementById("select-section").classList.add("hidden");
         document.getElementById("game-section").classList.add("hidden");
         return;
     }
@@ -14,7 +13,6 @@ window.onload = async () => {
         await loadLeaderboard();
         
         document.getElementById("login-section").classList.add("hidden");
-        document.getElementById("select-section").classList.add("hidden");
         document.getElementById("game-section").classList.remove("hidden");
 
         startCoinRunGame();   // call your original game start function
@@ -23,7 +21,6 @@ window.onload = async () => {
         // If 401, show login
         if (error.status === 401) {
             document.getElementById("login-section").classList.remove("hidden");
-            document.getElementById("select-section").classList.add("hidden");
             document.getElementById("game-section").classList.add("hidden");
         }
     }
@@ -38,7 +35,7 @@ async function loadPlayerInfo() {
     currentUser = result; // Store globally
 
     document.getElementById("player-info").innerText =
-        `Player: ${result.username} | Character: ${result.characterName}`;
+        `Player: ${result.username}`;
     
     // Pre-select the character in the dropdown if on select screen
     const select = document.getElementById("character-select");
@@ -56,7 +53,7 @@ async function loadLeaderboard() {
 
     data.forEach(item => {
         const li = document.createElement("li");
-        li.innerText = `${item.user} (${item.character}) - Score: ${item.scoreValue} | Time: ${item.timeTaken}s`;
+        li.innerText = `${item.user} - Score: ${item.scoreValue} | Time: ${item.timeTaken}s`;
         list.appendChild(li);
     });
 }
